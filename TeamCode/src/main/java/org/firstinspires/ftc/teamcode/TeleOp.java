@@ -18,16 +18,14 @@ public class TeleOp  extends CommandOpMode {
     @Override
     public void run(){
 
-        robot.leftBack.setPower(gamepad1.right_stick_y);
-
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
 
-        robot.leftFront.setPower(y+x+rx);
-        robot.leftBack.setPower(y-x+rx);
-        robot.rightFront.setPower(y-x-rx);
-        robot.rightBack.setPower(y+x-rx);
+        robot.leftFront.setPower(y + x + rx);
+        robot.leftBack.setPower(y - x + rx);
+        robot.rightFront.setPower(y - x - rx);
+        robot.rightBack.setPower(y + x - rx);
 
         telemetry.addData("TeleOp Running", "!");
         telemetry.addData("Power", robot.leftBack.getPower());
