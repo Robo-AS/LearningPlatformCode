@@ -63,16 +63,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class StarterBotTeleop extends OpMode {
     final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
     final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
-    final double FULL_SPEED = 1.0;
-
+    final double FULL_SPEED = 0.8;
     /*
      * When we control our launcher motor, we are using encoders. These allow the control system
      * to read the current speed of the motor and apply more or less power to keep it at a constant
      * velocity. Here we are setting the target, and minimum velocity that the launcher should run
      * at. The minimum velocity is a threshold for determining when to fire.
      */
-    final double LAUNCHER_TARGET_VELOCITY = 1125;
-    final double LAUNCHER_MIN_VELOCITY = 1075;
+    final double LAUNCHER_TARGET_VELOCITY = 650;
+    final double LAUNCHER_MIN_VELOCITY = 500;
 
     // Declare OpMode members.
     private DcMotor leftDrive = null;
@@ -221,7 +220,7 @@ public class StarterBotTeleop extends OpMode {
         /*
          * Now we call our "Launch" function.
          */
-        launch(gamepad1.rightBumperWasPressed());
+        launch(gamepad1.right_bumper);
 
         /*
          * Show the state and motor powers
@@ -257,25 +256,35 @@ public class StarterBotTeleop extends OpMode {
                     launchState = LaunchState.SPIN_UP;
                 }
                 break;
+
             case SPIN_UP:
                 launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
+                // Re-activăm verificarea vitezei pentru siguranță
                 if (launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
                     launchState = LaunchState.LAUNCH;
                 }
                 break;
+
             case LAUNCH:
                 leftFeeder.setPower(FULL_SPEED);
                 rightFeeder.setPower(FULL_SPEED);
                 feederTimer.reset();
                 launchState = LaunchState.LAUNCHING;
                 break;
+
             case LAUNCHING:
-                if (feederTimer.seconds() > FEED_TIME_SECONDS) {
-                    launchState = LaunchState.IDLE;
+                // Am mărit timpul la 0.5 secunde pentru test
+                if (feederTimer.seconds() > 0.5) {
                     leftFeeder.setPower(STOP_SPEED);
                     rightFeeder.setPower(STOP_SPEED);
+
+                    // OPRIRE MOTOR: Dacă vrei să se oprească după lansare, pune linia asta:
+                    launcher.setVelocity(STOP_SPEED);
+
+                    launchState = LaunchState.IDLE;
                 }
                 break;
         }
     }
+
 }
