@@ -216,6 +216,14 @@ public class StarterBotTeleop extends OpMode {
         } else if (gamepad1.b) { // stop flywheel
             launcher.setVelocity(STOP_SPEED);
         }
+        //am adaugat if-ul asta ca sa testez daca merge
+        if (gamepad1.x) {
+            leftFeeder.setPower(0.8);
+            rightFeeder.setPower(0.8);
+        } else {
+            leftFeeder.setPower(0.0);
+            rightFeeder.setPower(0.0);
+        }
 
         /*
          * Now we call our "Launch" function.
@@ -260,9 +268,9 @@ public class StarterBotTeleop extends OpMode {
             case SPIN_UP:
                 launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
                 // Re-activăm verificarea vitezei pentru siguranță
-                if (launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
+                //if (launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
                     launchState = LaunchState.LAUNCH;
-                }
+                //}
                 break;
 
             case LAUNCH:
