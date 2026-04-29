@@ -70,8 +70,8 @@ public class StarterBotTeleop extends OpMode {
      * velocity. Here we are setting the target, and minimum velocity that the launcher should run
      * at. The minimum velocity is a threshold for determining when to fire.
      */
-    final double LAUNCHER_TARGET_VELOCITY = 650;
-    final double LAUNCHER_MIN_VELOCITY = 500;
+    final double LAUNCHER_TARGET_VELOCITY = 450;
+    final double LAUNCHER_MIN_VELOCITY = 400;
 
     // Declare OpMode members.
     private DcMotor leftDrive = null;
@@ -182,6 +182,9 @@ public class StarterBotTeleop extends OpMode {
      */
     @Override
     public void init_loop() {
+
+
+
     }
 
     /*
@@ -217,7 +220,7 @@ public class StarterBotTeleop extends OpMode {
             launcher.setVelocity(STOP_SPEED);
         }
         //am adaugat if-ul asta ca sa testez daca merge
-        if (gamepad1.x) {
+        if (gamepad1.right_trigger_pressed) {
             leftFeeder.setPower(0.8);
             rightFeeder.setPower(0.8);
         } else {
@@ -268,21 +271,21 @@ public class StarterBotTeleop extends OpMode {
             case SPIN_UP:
                 launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
                 // Re-activăm verificarea vitezei pentru siguranță
-                //if (launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
+               // if (launcher.getVelocity() > LAUNCHER_MIN_VELOCITY) {
                     launchState = LaunchState.LAUNCH;
                 //}
                 break;
 
             case LAUNCH:
-                leftFeeder.setPower(FULL_SPEED);
-                rightFeeder.setPower(FULL_SPEED);
+                leftFeeder.setPower(1);
+                rightFeeder.setPower(1); //aici pun 1 pt cau launcherfullspeed este 0.8
                 feederTimer.reset();
                 launchState = LaunchState.LAUNCHING;
                 break;
 
             case LAUNCHING:
                 // Am mărit timpul la 0.5 secunde pentru test
-                if (feederTimer.seconds() > 0.5) {
+                if (feederTimer.seconds() > 0.1) {
                     leftFeeder.setPower(STOP_SPEED);
                     rightFeeder.setPower(STOP_SPEED);
 
